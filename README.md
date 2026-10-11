@@ -1,6 +1,6 @@
 # Deploy and Host Odoo with Railway
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/odoo-20-business-apps-suite)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/odoo-20-business-apps-suite?referralCode=20H68q)
 
 Odoo is an open-source suite of business apps: CRM, sales, inventory, invoicing, website, e-commerce, project, helpdesk and more, all on one database. This community template deploys Odoo 20 Community from the official image on Railway with Postgres, production worker mode, a persistent filestore and a secured database manager.
 
