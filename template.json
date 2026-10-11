@@ -1,0 +1,271 @@
+{
+ "name": "Odoo 20 Business Apps Suite",
+ "description": "CRM, sales, inventory, invoicing and website in one. Odoo with Postgres.",
+ "category": "Other",
+ "tags": [
+  "odoo",
+  "erp",
+  "crm",
+  "inventory",
+  "invoicing",
+  "website",
+  "postgres"
+ ],
+ "upstream": {
+  "repo": "odoo/docker",
+  "version": "20.0-20260926",
+  "checked": "2026-10-10"
+ },
+ "services": {
+  "Odoo": {
+   "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/odoo.svg",
+   "source": {
+    "repo": "baranberkay96/odoo-railway",
+    "rootDirectory": "/services/odoo"
+   },
+   "startCommand": null,
+   "preDeployCommand": null,
+   "healthcheckPath": "/web/health",
+   "healthcheckTimeout": 900,
+   "restartPolicyType": "ON_FAILURE",
+   "restartPolicyMaxRetries": 10,
+   "numReplicas": 1,
+   "cronSchedule": null,
+   "publicDomain": true,
+   "targetPort": 8080,
+   "tcpProxy": null,
+   "volume": {
+    "mountPath": "/var/lib/odoo"
+   },
+   "variables": {
+    "PORT": {
+     "defaultValue": "8080",
+     "description": "Port nginx listens on (public domain target). Odoo itself listens on 127.0.0.1:8069/8072.",
+     "required": false
+    },
+    "PGHOST": {
+     "defaultValue": "${{Postgres.RAILWAY_PRIVATE_DOMAIN}}",
+     "description": "Postgres host (private network).",
+     "required": false
+    },
+    "PGPORT": {
+     "defaultValue": "5432",
+     "description": "Postgres port.",
+     "required": false
+    },
+    "PGUSER": {
+     "defaultValue": "${{Postgres.POSTGRES_USER}}",
+     "description": "Database user. Must not be 'postgres' (Odoo refuses it).",
+     "required": false
+    },
+    "PGPASSWORD": {
+     "defaultValue": "${{Postgres.POSTGRES_PASSWORD}}",
+     "description": "Database password.",
+     "required": false
+    },
+    "ODOO_DB_NAME": {
+     "defaultValue": "odoo",
+     "description": "Database Odoo serves (dbfilter and db_name are pinned to it).",
+     "required": false
+    },
+    "ODOO_MASTER_PASSWORD": {
+     "defaultValue": "${{secret(32)}}",
+     "description": "Master password (admin_passwd) protecting the database manager: create, duplicate, backup, restore, drop.",
+     "required": false
+    },
+    "ODOO_ADMIN_LOGIN": {
+     "defaultValue": "admin",
+     "description": "Login of the administrator user set when the database is created. Use an e-mail address if you prefer.",
+     "required": false
+    },
+    "ODOO_ADMIN_PASSWORD": {
+     "defaultValue": "${{secret(20)}}",
+     "description": "Password of the administrator user, set once when the database is created. Change it later in Odoo.",
+     "required": false
+    },
+    "ODOO_AUTO_CREATE_DB": {
+     "defaultValue": "true",
+     "description": "Create the database on first boot (no demo data). Set false to create it yourself in /web/database/manager.",
+     "required": false
+    },
+    "ODOO_INIT_MODULES": {
+     "defaultValue": "base",
+     "description": "Modules installed at database creation, comma-separated (e.g. base,crm,sale_management,stock). Install the rest from the Apps menu.",
+     "required": false
+    },
+    "ODOO_INIT_LANG": {
+     "defaultValue": "",
+     "description": "Extra language loaded at database creation, e.g. de_DE or tr_TR. Optional.",
+     "required": false
+    },
+    "ODOO_UPDATE_MODULES": {
+     "defaultValue": "",
+     "description": "Modules to update on the next start (e.g. all after a patch upgrade). Clear it again afterwards. Optional.",
+     "required": false
+    },
+    "ODOO_LIST_DB": {
+     "defaultValue": "False",
+     "description": "Database manager and selector. Keep False in production; set True temporarily to back up or restore from the UI.",
+     "required": false
+    },
+    "ODOO_WORKERS": {
+     "defaultValue": "2",
+     "description": "HTTP worker processes (prefork). Rule of thumb: 2 x vCPU + 1. Must be > 0 for /websocket (live chat, notifications).",
+     "required": false
+    },
+    "ODOO_MAX_CRON_THREADS": {
+     "defaultValue": "1",
+     "description": "Scheduled-action workers.",
+     "required": false
+    },
+    "ODOO_DB_MAXCONN": {
+     "defaultValue": "16",
+     "description": "Max Postgres connections per Odoo process. Keep (workers + cron + 1) x this below Postgres max_connections (100).",
+     "required": false
+    },
+    "ODOO_LIMIT_MEMORY_SOFT": {
+     "defaultValue": "805306368",
+     "description": "Recycle a worker after a request once it uses more than this many bytes (768 MiB).",
+     "required": false
+    },
+    "ODOO_LIMIT_MEMORY_HARD": {
+     "defaultValue": "1073741824",
+     "description": "Kill a worker immediately above this many bytes (1 GiB).",
+     "required": false
+    },
+    "ODOO_LIMIT_TIME_CPU": {
+     "defaultValue": "600",
+     "description": "Max CPU seconds per request (imports and reports need more than Odoo's 60 s default).",
+     "required": false
+    },
+    "ODOO_LIMIT_TIME_REAL": {
+     "defaultValue": "1200",
+     "description": "Max wall-clock seconds per request.",
+     "required": false
+    },
+    "NGINX_CLIENT_MAX_BODY_SIZE": {
+     "defaultValue": "256m",
+     "description": "Max upload size (attachments, imports, database restores).",
+     "required": false
+    },
+    "SMTP_HOST": {
+     "defaultValue": "",
+     "description": "Outgoing SMTP server. Optional: you can also configure mail servers in Settings > Technical > Outgoing Mail Servers.",
+     "required": false
+    },
+    "SMTP_PORT": {
+     "defaultValue": "587",
+     "description": "SMTP port.",
+     "required": false
+    },
+    "SMTP_STARTTLS": {
+     "defaultValue": "True",
+     "description": "Use STARTTLS for SMTP.",
+     "required": false
+    },
+    "SMTP_USER": {
+     "defaultValue": "",
+     "description": "SMTP username. Optional.",
+     "required": false
+    },
+    "SMTP_PASSWORD": {
+     "defaultValue": "",
+     "description": "SMTP password. Optional.",
+     "required": false
+    },
+    "EMAIL_FROM": {
+     "defaultValue": "",
+     "description": "Default sender address, e.g. odoo@yourcompany.com. Optional.",
+     "required": false
+    },
+    "RAILWAY_DEPLOYMENT_DRAINING_SECONDS": {
+     "defaultValue": "30",
+     "description": "Let running requests finish on redeploy.",
+     "required": false
+    }
+   }
+  },
+  "Postgres": {
+   "icon": "https://devicons.railway.app/i/postgresql.svg",
+   "source": {
+    "image": "ghcr.io/railwayapp-templates/postgres-ssl:18"
+   },
+   "startCommand": null,
+   "preDeployCommand": null,
+   "healthcheckPath": null,
+   "healthcheckTimeout": null,
+   "restartPolicyType": "ON_FAILURE",
+   "restartPolicyMaxRetries": 10,
+   "numReplicas": 1,
+   "cronSchedule": null,
+   "publicDomain": false,
+   "targetPort": null,
+   "tcpProxy": null,
+   "volume": {
+    "mountPath": "/var/lib/postgresql/data"
+   },
+   "variables": {
+    "PGDATA": {
+     "defaultValue": "/var/lib/postgresql/data/pgdata",
+     "description": "Location where the database will be initialized.",
+     "required": false
+    },
+    "PGHOST": {
+     "defaultValue": "${{RAILWAY_PRIVATE_DOMAIN}}",
+     "description": "Railway Private Domain Name.",
+     "required": false
+    },
+    "PGPORT": {
+     "defaultValue": "5432",
+     "description": "Port to connect to Postgres.",
+     "required": false
+    },
+    "PGUSER": {
+     "defaultValue": "${{ POSTGRES_USER }}",
+     "description": "Required variable for Data panel.",
+     "required": false
+    },
+    "PGDATABASE": {
+     "defaultValue": "${{POSTGRES_DB}}",
+     "description": "Required variable for the data panel.",
+     "required": false
+    },
+    "PGPASSWORD": {
+     "defaultValue": "${{POSTGRES_PASSWORD}}",
+     "description": "Required variable for Data panel.",
+     "required": false
+    },
+    "POSTGRES_DB": {
+     "defaultValue": "railway",
+     "description": "Default database created when image is started.",
+     "required": false
+    },
+    "DATABASE_URL": {
+     "defaultValue": "postgresql://${{PGUSER}}:${{POSTGRES_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:5432/${{PGDATABASE}}",
+     "description": "URL to connect to Postgres database.",
+     "required": false
+    },
+    "POSTGRES_USER": {
+     "defaultValue": "odoo",
+     "description": "Superuser created on first boot. 'odoo' instead of the Railway default 'postgres', which Odoo refuses to use.",
+     "required": false
+    },
+    "SSL_CERT_DAYS": {
+     "defaultValue": "820",
+     "description": "SSL certificate expiry in days.",
+     "required": false
+    },
+    "POSTGRES_PASSWORD": {
+     "defaultValue": "${{ secret(32, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\") }}",
+     "description": "Password to connect to DB.",
+     "required": false
+    },
+    "RAILWAY_DEPLOYMENT_DRAINING_SECONDS": {
+     "defaultValue": "60",
+     "description": "Allow Postgres to cleanly shut down.",
+     "required": false
+    }
+   }
+  }
+ }
+}
